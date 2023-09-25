@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "baichuan-api"
+version = "0.1.0"
+description = "百川 53B API"
+authors = ["Jiayu Liu <jiayu@blacklake.cn>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["baichuan", "53B", "LLM", "Chatbot"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+python-dotenv = "^1.0.0"
+pydantic = "^2.3.0"
+fastapi = "^0.103.1"
+uvicorn = { extras = ["standard"], version = "^0.23.2" }
+beartype = "^0.16.2"
+python-ulid = "^2.2.0"
+gunicorn = "^21.2.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9.1"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
