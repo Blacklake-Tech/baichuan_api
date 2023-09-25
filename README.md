@@ -1,5 +1,7 @@
 # Baichuan API
 
+[![Python CI](https://github.com/Blacklake-Tech/baichuan_api/actions/workflows/CI.yaml/badge.svg)](https://github.com/Blacklake-Tech/baichuan_api/actions/workflows/CI.yaml)
+
 百川大语言模型 53B API版本wrapper - Wrapper around Baichuan API
 
 ## Running locally in dev mode
