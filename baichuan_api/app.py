@@ -1,7 +1,8 @@
 from functools import cache
 from logging.config import dictConfig
+from typing import Annotated
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from ulid import ULID
 
 from .api import baichuan_api_req
@@ -16,6 +17,6 @@ async def root():
 
 
 @app.get("/chat")
-async def chat(message: str) -> BaichuanData:
-    resp = baichuan_api_req([message])
+async def chat(msg: Annotated[list[str] | None, Query()]) -> BaichuanData:
+    resp = baichuan_api_req(msg)
     return resp.data
