@@ -16,7 +16,7 @@ fastapi = "^0.103.1"
 beartype = "^0.16.2"
 python-ulid = "^2.2.0"
 gunicorn = "^21.2.0"
-hypercorn = "^0.14.4"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
