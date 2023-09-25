@@ -1,12 +1,8 @@
-from functools import cache
-from logging.config import dictConfig
 from typing import Annotated
 
-from fastapi import FastAPI, Query
-from ulid import ULID
+from fastapi import FastAPI, HTTPException, Query
 
 from .api import baichuan_api_req
-from .models import BaichuanData
 
 app = FastAPI()
 
@@ -17,6 +13,10 @@ async def root():
 
 
 @app.get("/chat")
-async def chat(msg: Annotated[list[str] | None, Query()], stream: bool = False):
+async def chat(
+    msg: Annotated[list[str], Query(title="message")] = [], stream: bool = False
+):
+    if len(msg) == 0:
+        raise HTTPException(status_code=400, detail="message不能为空")
     r = await baichuan_api_req(msg, stream=stream)
     return r

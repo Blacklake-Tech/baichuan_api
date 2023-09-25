@@ -14,7 +14,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from ulid import ULID
 
-from .models import BaichuanReq, BaichuanResp, BaichuanData
+from .models import BaichuanData, BaichuanReq, BaichuanResp
 
 
 class LogConfig(BaseModel):
