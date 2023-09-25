@@ -10,10 +10,11 @@ import dotenv
 import requests
 from beartype import beartype
 from fastapi import HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from ulid import ULID
 
-from .models import BaichuanReq, BaichuanResp
+from .models import BaichuanReq, BaichuanResp, BaichuanData
 
 
 class LogConfig(BaseModel):
@@ -87,34 +88,55 @@ def generate_header(data: BaichuanReq) -> tuple[dict, str]:
     return headers, req_id
 
 
+def validate_response(req_id: str, r: BaichuanResp) -> BaichuanData:
+    if r.code != 0:
+        logger.warning("[%s] %s %s", req_id, r.code, r.msg)
+        raise HTTPException(status_code=500, detail=r.code.get_message())
+    else:
+        logger.info("[%s] %s %s", req_id, r.code, r.msg)
+        return r.data
+
+
+API_HOST = "https://api.baichuan-ai.com"
+
+
 @beartype
-def baichuan_api_req(messages: list[str]) -> BaichuanResp:
-    url = "https://api.baichuan-ai.com/v1/chat"
+async def baichuan_api_req(messages: list[str], stream: bool = False):
+    url = f"{API_HOST}/v1/stream/chat" if stream else f"{API_HOST}/v1/chat"
     data = BaichuanReq(
         model="Baichuan2-53B",
         messages=[{"role": "user", "content": message} for message in messages],
     )
     headers, req_id = generate_header(data)
     logger.info("[%s] %s", req_id, data.model_dump_json(exclude_none=True))
-    response = requests.post(
-        url, json=data.model_dump(exclude_none=True), headers=headers
-    )
+    data = data.model_dump(exclude_none=True)
+    with requests.post(url, json=data, headers=headers, stream=stream) as response:
+        if response.status_code == 200:
+            if stream:
 
-    if response.status_code == 200:
-        try:
-            r = response.json()
-            r = BaichuanResp(**r)
-        except Exception as e:
-            logger.warning("[%s] %s", req_id, "上游返回解析失败")
-            raise HTTPException(status_code=500, detail="上游返回解析失败")
-        if r.code != 0:
-            logger.warning("[%s] %s %s", req_id, r.code, r.msg)
-            raise HTTPException(status_code=500, detail=r.code.get_message())
+                async def iterfile():
+                    for line in response.iter_lines(decode_unicode=True):
+                        logger.info("%s", response.headers)
+                        if line:
+                            logger.info("%s", line)
+                            r = json.loads(line)
+                            r = BaichuanResp(**r)
+                            logger.info("%s", r)
+                            data = validate_response(req_id, r)
+                            for msg in data.messages:
+                                yield msg.content
+
+                return StreamingResponse(iterfile(), media_type="text/event-stream")
+            else:
+                try:
+                    r = response.json()
+                    r = BaichuanResp(**r)
+                    return validate_response(req_id, r)
+                except Exception as e:
+                    logger.warning("[%s] %s", req_id, "上游返回解析失败")
+                    raise HTTPException(status_code=500, detail="上游返回解析失败")
         else:
-            logger.info("[%s] %s %s", req_id, r.code, r.msg)
-            return r
-    else:
-        logger.error("请求失败，状态码: %s", response.status_code)
-        raise HTTPException(
-            status_code=500, detail="请求失败，状态码: %s" % response.status_code
-        )
+            logger.error("请求失败，状态码: %s", response.status_code)
+            raise HTTPException(
+                status_code=500, detail="请求失败，状态码: %s" % response.status_code
+            )

@@ -10,7 +10,7 @@
 # install dependencies
 poetry install
 # run
-uvicorn baichuan_api.app:app --reload
+hypercorn baichuan_api.app:app --reload
 # open in browser http://localhost:8000/chat?msg=Somos+Banditos
 # you can use multiple msg query params to send multiple messages
 ```
