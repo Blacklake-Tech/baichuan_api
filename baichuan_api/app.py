@@ -17,6 +17,6 @@ async def root():
 
 
 @app.get("/chat")
-async def chat(msg: Annotated[list[str] | None, Query()]) -> BaichuanData:
+async def chat(msg: Annotated[list[str], Query()]) -> BaichuanData:
     resp = baichuan_api_req(msg)
     return resp.data
