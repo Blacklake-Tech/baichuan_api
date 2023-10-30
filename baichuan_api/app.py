@@ -1,9 +1,6 @@
-from functools import cache
-from logging.config import dictConfig
 from typing import Annotated
 
 from fastapi import FastAPI, Query
-from ulid import ULID
 
 from .api import baichuan_api_req
 from .models import BaichuanData

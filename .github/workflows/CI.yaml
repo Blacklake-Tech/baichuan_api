@@ -29,11 +29,11 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Run isort
-        run: poetry run isort --check-only --diff .
+      - name: Run ruff lint check
+        run: poetry run ruff check baichuan_api --verbose
 
-      - name: Run black
-        run: poetry run black --check .
+      - name: Run ruff format check
+        run: poetry run ruff format baichuan_api --check
 
       # - name: Run tests
       #   run: poetry run pytest
