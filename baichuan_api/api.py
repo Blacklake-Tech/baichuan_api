@@ -104,7 +104,7 @@ def baichuan_api_req(messages: list[str]) -> BaichuanResp:
         try:
             r = response.json()
             r = BaichuanResp(**r)
-        except Exception as e:
+        except Exception:
             logger.warning("[%s] %s", req_id, "上游返回解析失败")
             raise HTTPException(status_code=500, detail="上游返回解析失败")
         if r.code != 0:
