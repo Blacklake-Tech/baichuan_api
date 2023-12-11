@@ -19,7 +19,7 @@ python-ulid = "^2.2.0"
 gunicorn = "^21.2.0"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.1.6"
+ruff = "^0.1.7"
 
 [build-system]
 requires = ["poetry-core"]
