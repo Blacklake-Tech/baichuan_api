@@ -11,7 +11,7 @@ keywords = ["baichuan", "53B", "LLM", "Chatbot"]
 python = "^3.11"
 requests = "^2.31.0"
 python-dotenv = "^1.0.0"
-pydantic = "^2.5.2"
+pydantic = "^2.6.1"
 fastapi = "^0.104.1"
 uvicorn = { extras = ["standard"], version = "^0.23.2" }
 beartype = "^0.16.4"
