@@ -10,7 +10,7 @@ keywords = ["baichuan", "53B", "LLM", "Chatbot"]
 [tool.poetry.dependencies]
 python = "^3.11"
 requests = "^2.31.0"
-python-dotenv = "^1.0.0"
+python-dotenv = "^1.0.1"
 pydantic = "^2.5.2"
 fastapi = "^0.104.1"
 uvicorn = { extras = ["standard"], version = "^0.23.2" }
