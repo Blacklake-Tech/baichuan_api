@@ -14,7 +14,7 @@ python-dotenv = "^1.0.0"
 pydantic = "^2.5.2"
 fastapi = "^0.104.1"
 uvicorn = { extras = ["standard"], version = "^0.23.2" }
-beartype = "^0.16.4"
+beartype = "^0.17.2"
 python-ulid = "^2.2.0"
 gunicorn = "^21.2.0"
 
