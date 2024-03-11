@@ -13,7 +13,7 @@ requests = "^2.31.0"
 python-dotenv = "^1.0.0"
 pydantic = "^2.5.2"
 fastapi = "^0.104.1"
-uvicorn = { extras = ["standard"], version = "^0.23.2" }
+uvicorn = { extras = ["standard"], version = "^0.28.0" }
 beartype = "^0.16.4"
 python-ulid = "^2.2.0"
 gunicorn = "^21.2.0"
